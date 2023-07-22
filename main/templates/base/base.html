@@ -1,0 +1,85 @@
+{% load static %}
+<!doctype html>
+<html lang="ru">
+<link rel="stylesheet" href="{% static 'css/bootstrap-icons.css'%}">
+<link rel="icon" href="{% static 'imgs/logo/logo.png' %}"/>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{{ pagename }} - AHPC</title>
+
+    {% block base_css %}
+      <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    {% endblock %}
+
+    {% block extra_css %}{% endblock %}
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org/",
+      "@type": "Product",
+      "name": "Продажа автомобилей",
+      "image": "",
+      "description": "Car room предлагает приобрести автомобили с пробегом по России, а так же авто без пробега по РФ.
+    Каждый автомобиль, который продается в нашем магазине проходит контроль качества:
+    1. Автомобиль должен быть исправным (беспроблемное передвижение)
+    2. Автомобиль должен быть безопасным
+    3. Юридическая чистота (постановка на учет без проблем)",
+      "brand": {
+        "@type": "Brand",
+        "name": "CAR ROOM"
+      },
+      "offers": {
+        "@type": "Offer",
+        "url": "https://www.car-room.ru/services/prodaza-avto#services",
+        "priceCurrency": "",
+        "price": ""
+      }
+    }
+</script>
+  </head>
+  <style>
+     body {
+      background-image: url(" {% static 'imgs/background/bg.png' %} "); /* Путь к фоновому изображению */
+      background-size: 100%;
+     }
+  </style>
+
+  <body>
+
+    <header>
+      {% block header %}{% include 'base/navbar.html' %}{% endblock %}
+    </header>
+    <br>
+    <br>
+    <br>
+    <br>
+    <main>
+      <div class="container">
+        <div class="row mt-1" align="center">
+          <div class="mt-1 flex-shrink-0">
+            {% include 'base/messages.html' %}
+          </div>
+
+        </div>
+        {% block content %}{% endblock %}
+      </div>
+    </main>
+
+    <footer>
+      {% block footer %}{% include 'base/footer.html' %}{% endblock %}
+    </footer>
+
+    {% block base_js %}
+      <script src="{% static 'js/popper.min.js' %}"></script>
+      <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+      <script src="{% static 'js/search_redirect.js' %}"></script>
+    {% endblock %}
+
+    {% block extra_js %}{% endblock %}
+
+  </body>
+<br>
+<br>
+<br>
+</html>

@@ -1,0 +1,85 @@
+{% load static %}
+
+<div class="col-2 mx-5 my-4" style="width: 15,5rem;">
+  <div class="card shadow h-100" style="width: 17rem;">
+    <a href="{% url 'product_page' product.id %}" class="card-link">
+      <div id="carouselExampleIndicators{{product.id}}" class="carousel slide carousel" data-bs-ride="carousel">
+        <div class="carousel-inner">
+
+          {% if product.productimage_set.all %}
+          {% for productimage in product.productimage_set.all %}
+            <div class="carousel-item active">
+              <img src="{{ productimage.image.url }}" class="d-block" width="260rem" height="280rem" alt="...">
+            </div>
+          {% endfor %}
+          {% else %}
+          <div class="carousel-item active">
+            <img src="{% static 'imgs/src/logo_notitle.png' %}" class="d-block" width="260rem" height="280rem"
+                 alt="...">
+          </div>
+          {% endif %}
+
+        </div>
+
+        {% if product.productimage_set.all %}
+          <button class="carousel-control-prev" style="position: absolute; z-index: 0;" type="button"
+                  data-bs-target="#carouselExampleIndicators{{product.id}}" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Предыдущий</span>
+          </button>
+          <button class="carousel-control-next" style="position: absolute; z-index: 0;" type="button"
+                  data-bs-target="#carouselExampleIndicators{{product.id}}" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Следующий</span>
+          </button>
+        {% endif %}
+
+      </div>
+    </a>
+    <div class="card-body">
+
+      <a href="{% url 'product_page' product.id %}" class="card-link link-dark">
+        <div class="row">
+          <div class="col">
+          </div>
+        </div>
+        <h4 class="card-title">{{ product.title|truncatechars:19 }}</h4>
+      </a>
+
+      <small>
+        <p class="card-text text-secondary ">Описание:
+        <p class="card-text">
+        {% if product.description %}
+          {{product.description|truncatechars:40}}
+        {% else %}
+          <span class="placeholder col-4"></span>
+          <span class="placeholder col-6"></span>
+        {% endif %}
+      </small>
+
+    </div>
+
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">
+        <div class="row">
+          <div class="col"><p class="card-text">Рейтинг: </p></div>
+          <div class="col">{% include 'base/widgets/product_rating.html' %}</div>
+        </div>
+      </li>
+      <li class="list-group-item">Категория:
+        <span class="badge bg-secondary">{{ product.category.name }}</span>
+      </li>
+      {% if product.is_confirmed %}
+        <li class="list-group-item">Товар подтверждён
+          <i class="bi bi-patch-check-fill"></i>
+        </li>
+      {% else %}
+        <li class="list-group-item">Товар не подтверждён
+          <i class="bi bi-x-circle-fill"></i>
+        </li>
+      {% endif %}
+
+    </ul>
+
+  </div>
+</div>

@@ -1,0 +1,215 @@
+{% extends 'base/base.html' %}
+
+{% load static %}
+
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/stars_rating.css' %}" xmlns="http://www.w3.org/1999/html">
+  <link rel="stylesheet" href="{% static 'css/mini_rating.css' %}">
+{% endblock %}
+
+
+{% block content %}
+
+
+  <div class="row card border rounded-1 my-5">
+    <h5 class="card-header">
+
+      {% if user.is_staff %}
+        <a href="{% url 'product_delete' product.id %}" class = "btn m-1 btn-danger" style = "float: right" title="Удалить товар">
+          <i class="bi bi-trash"></i>
+        </a>
+      {% endif %}
+        <a href="{% url 'product_edit_page' product.id %}" class="btn m-1" style="background-color: #ABF26D; float: right" title="Редактировать товар">
+          <i class="bi bi-pencil-square"></i>
+        </a>
+        <a href="{% url 'review_add' %}?first_id={{product.id}}" class="btn m-1" style="background-color: #ABF26D; float: right" title="Создать обзор">
+          <i class="bi bi-card-list"></i> <i class="bi bi-search"></i> <i class="bi bi-card-list"></i>
+        </a>
+      {% if user.is_store_manager %}
+        {% if not product.is_confirmed %}
+          <a href="{% url 'product_verify' product.id %}" class="btn m-1" style="background-color: #ABF26D; float: right" title="Верифицировать товар в магазине '{{ user.get_store }}'">
+            <i class="bi bi-patch-check"></i>
+          </a>
+        {% else %}
+          <a href="{% url 'product_cancel_verification' product.id %}" class="btn m-1" style="background-color: #ABF26D; float: right" title="Убрать из магазина '{{ user.get_store }}'">
+            <i class="bi bi-x-circle"></i>
+          </a>
+      {% endif %}
+
+      {% endif %}
+
+      </h5>
+    <br>
+    <div class="row">
+      <div class="col">
+        <p class="h5 mt-3"></p>
+    {% if images %}
+        <div id="carouselExampleIndicators{{product.id}}" class="carousel slide carousel-dark border rounded-1 mb-3" data-bs-ride="carousel">
+        <div class="carousel-inner">
+
+          {% if product.productimage_set.all %}
+
+          {% for productimage in product.productimage_set.all %}
+            <div class="carousel-item active">
+              <img src="{{ productimage.image.url }}" class="d-block" width="625rem" height="500rem" alt="...">
+            </div>
+          {% endfor %}
+
+          {% else %}
+          <div class="carousel-item active">
+            <img src="{% static 'imgs/src/logo_notitle.png' %}" class="d-block" width="625rem" height="500rem"
+                 alt="...">
+          </div>
+          {% endif %}
+
+        </div>
+
+        {% if product.productimage_set.all %}
+          <button class="carousel-control-prev" style="position: absolute; z-index: 0;" type="button"
+                  data-bs-target="#carouselExampleIndicators{{product.id}}" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Предыдущий</span>
+          </button>
+          <button class="carousel-control-next" style="position: absolute; z-index: 0;" type="button"
+                  data-bs-target="#carouselExampleIndicators{{product.id}}" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Следующий</span>
+          </button>
+        {% endif %}
+
+      </div>
+
+    {% else %}
+      <p>У товара отсутствуют изображения
+      <a class="nav-link" href="{% url 'product_add_image_page' product.id %}">Добавить фото</a></p>
+    {% endif %}
+
+        <div class="col text-center">
+            <button class="btn text-secondary mt-4" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" title="Свернуть/развернуть список характеристик">
+          Характеристики <i class="bi bi-arrow-up"></i><i class="bi bi-arrow-down"></i>
+        </button>
+          </div>
+      </div>
+      <div class="col">
+          <div class="h1 mt-3 text-center">{{product.title}}</div>
+        <br>
+        <br>
+        {% if product.is_confirmed %}
+        <div class="text">Товар подтверждён
+          <i class="bi bi-patch-check-fill"></i>
+        </div>
+      {% else %}
+        <div class="text">Товар не подтверждён
+          <i class="bi bi-x-circle-fill"></i>
+        </div>
+      {% endif %}
+        <hr>
+      <div class="rounded-1" style="width:30rem">
+        <div class="form-label h6">Описание:</div>
+        <div class="text-secondary">
+        {% if product.description %}
+        {{product.description}}
+        {% else %}
+          у товара отсутствует описание
+        {% endif %}
+          </div>
+      </div>
+
+        <hr>
+    <div class="col ">
+      <div class="row">
+        <div class="col">
+          <div class="row">
+            <div class="col-4"><p class="card-text h6">Рейтинг:</p></div>
+            <div class="col px-0">
+              {% include 'base/widgets/product_rating.html' %}
+            </div>
+            <div class="col-1 px-0">{{product.rating}}</div>
+          </div>
+
+        </div>
+        <div class="col-3">
+          <div class="form-label h6">Цвет:</div>
+          </div>
+          <div class="col-3">
+          <input type="color" class="form-control form-control-color" disabled id="exampleColorInput" value="{{product.color}}" title="Choose your color">
+            </div>
+      </div>
+
+    </div>
+      <div class="col ">
+        <div class="row">
+          <div class="row mt-1"></div>
+          <hr>
+          <div class="row">
+            {% if reviews %}
+              <p class="card-text h6">Этот товар сравнивают с</p>
+            {% else %}
+              <a href="{% url 'review_add' %}?first_id={{product.id}}" class="m-1 text-secondary" title="Создать обзор">
+                <small>
+                  Обзоров пока нет, можете создать их
+                </small>
+              </a>
+            {% endif %}
+          </div>
+          <div class="row">
+            {% for comparing_product in reviews %}
+            <div class="col-md-3 me-3 mt-3">
+              <div class="card" style="width: 10rem; height: 7rem">
+                <div class="card-body">
+                <h6 class="card-title">
+                  <a
+                    class="lead stretched-link"
+                    style="text-decoration: none"
+                    href="{% url 'comparing_review' comparing_product.review.id %}">
+                    {{ comparing_product.product|truncatechars:19 }}
+                  </a>
+                </h6>
+                <p class="card-text">{{ comparing_product.review.author }}</p>
+              </div>
+            </div>
+            </div>
+            {% endfor %}
+              <div class="mt-2">
+                {% if reviews %}
+                  <a href="{{reviews_url}}" class="text-secondary">Смотреть больше обзоров</a>
+                {% endif %}
+              </div>
+          </div>
+          {% if not product in user.get_all_rated_products %}
+          <div class="col">
+            {% include 'base/widgets/stars_rating.html' %}
+          </div>
+          {% endif %}
+        </div>
+
+      </div>
+  </div>
+      </div>
+
+    <br>
+    <div class="row">
+      <div class="col">
+        <table class="collapse table table-success table-striped table-hover" id = "collapseExample">
+      <thead>
+        <tr>
+          <th scope="col">Характеристика</th>
+          <th scope="col">Значение</th>
+        </tr>
+      </thead>
+      <tbody>
+          {% for prod_char in characteristics %}
+          <tr>
+            <td>{{ prod_char.characteristic.name }}</td>
+            <td>{{ prod_char.value }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+    </table>
+      </div>
+
+    </div>
+
+  </div>
+{% endblock %}

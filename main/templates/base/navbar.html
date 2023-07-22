@@ -1,0 +1,36 @@
+{% load static %}
+
+<style type="text/css">
+header {
+background-color: white;
+position: fixed;
+top: 0;
+z-index: 100;
+width: 100%;
+}
+</style>
+
+<nav class="navbar navbar-expand-lg navbar-dark" id = "header" style="background: #4247d6;">
+    <div class="container-fluid">
+    <a class="navbar-brand" href="/">
+      <img src="{% static 'imgs/logo/logo.png' %}" alt="" width="50" height="50" class="d-inline-block align-text-top">
+      AHPC
+    </a>
+    <button class="navbar-toggler" type="button btn-light" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+       {% include 'base/menu.html' %}
+      </ul>
+      <form class="d-flex">
+          <div class="lead nav-link h6 text-light me-4 mb-0">{{date}} {{week_day}}</div>
+          {% if request.user.is_authenticated %}
+            <a class="lead nav-link h6 text-light me-4 mb-0" href="{% url 'profile' %}">{{ user.username }}</a>
+          {% else %}
+            <a class="lead nav-link h6 text-light" href="{% url 'login' %}">Войти</a>
+          {% endif %}
+      </form>
+    </div>
+  </div>
+</nav>

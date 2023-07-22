@@ -1,0 +1,5 @@
+{% if request.user.is_staff or request.user.is_store_manager %}
+  <li class="nav-item">
+    <a class="lead nav-link h6 text-light me-2 mb-0" href="{% url 'add_product' %}">Добавить поле</a>
+  </li>
+{% endif %}

@@ -1,0 +1,60 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="row mt-3">
+  <div class="col">
+    <div class="card" style="">
+      <h5 class="card-header">Пользователь:
+        <div class="badge text-light bg-primary">{{ user.username }}</div>
+        <a href="{% url 'profile_edit' user.id %}" class="btn btn-primary" style="float: right">
+          <i class="bi bi-pencil-square"></i>
+        </a>
+      </h5>
+
+      <div class="card-body">
+        <div class="row mb-3">
+          <label class="col-sm-3 col-form-label">Username:</label>
+          <div class="text rounded opacity-75 w-50 p-2 " style="background-color: #eee;">{{ user.username }}</div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="col-sm-3 col-form-label">First name:</label>
+          <div class="text rounded opacity-75 w-50 p-2 " style="background-color: #eee;">{{ user.first_name }}</div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="col-sm-3 col-form-label">Last name:</label>
+          <div class="text rounded opacity-75 w-50 p-2 " style="background-color: #eee;">{{ user.last_name }}</div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="col-sm-3 col-form-label">Email:</label>
+          <div class="text rounded opacity-75 w-50 p-2 " style="background-color: #eee;">{{ user.email }}</div>
+       </div>
+
+        <div class="row mb-3">
+          <label class="col-sm-3 col-form-label">Дата регистрации:</label>
+          <div class="text rounded opacity-75 w-50 p-2 " style="background-color: #eee;">{{ user.date_joined }}</div>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input mb-2" type="checkbox"
+            {% if user.is_store_manager %} checked {% endif %}
+             disabled>
+          <label class="form-check-label">
+            Представитель колледжа
+          </label>
+        </div>
+        <div class="row mt-3 mb-3">
+          <div class="col">
+            <a class=" nav-link px-0 pt-0" href="{% url 'logout' %}"> <i class="bi bi-box-arrow-left"></i> Выйти</a>
+          </div>
+
+        </div>
+        </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

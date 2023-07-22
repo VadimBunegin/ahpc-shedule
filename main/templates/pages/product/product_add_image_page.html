@@ -1,0 +1,14 @@
+{% extends 'base/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+{{product}}
+
+<form method="post" action="{% url 'product_add_image_page' product.id %}" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ form|crispy }}
+  <input type="submit" value="Добавить" class="btn btn-success">
+</form>
+
+{% endblock %}

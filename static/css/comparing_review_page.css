@@ -1,0 +1,40 @@
+* {
+    position: relative;
+}
+
+.points {
+    background: inherit;
+    color: rgb(140, 140, 140);
+}
+
+.points:before {
+    content: '';
+    position: absolute;
+    bottom: .6rem;
+    width: 100%;
+    border-bottom: 2px dotted rgb(140, 140, 140);
+}
+
+.element {
+    background: inherit;
+}
+
+.no-margin {
+    margin: 0;
+}
+
+.no-padding {
+    padding: 0;
+}
+
+.green {
+    color: rgb(0, 190, 0);
+    text-decoration: underline;
+    text-decoration-color: rgb(0, 190, 0);
+}
+
+.red {
+    color: rgb(230, 5, 5);
+    text-decoration: underline;
+    text-decoration-color: rgb(230, 5, 5);
+}

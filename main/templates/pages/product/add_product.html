@@ -1,0 +1,30 @@
+{% extends 'base/base.html' %}
+
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+<div class="card">
+  <h5 class="card-header">
+    Добавить поле
+  </h5>
+  <div class="card-body">
+    <div class="col">
+    Календарь: <input type="date" name="calendar">
+  </div>
+    <br>
+<form method="post" class="col-8" action="{% url 'add_product' %}">
+  {% csrf_token %}
+  {{ form | crispy }}
+  <button class="btn btn-primary bottom rounded mt-5 mx-auto" type="submit">Загрузить на сайт</button>
+
+</form>
+  </div>
+</div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+  <script src="{% static 'js/product_add.js' %}"></script>
+{% endblock %}

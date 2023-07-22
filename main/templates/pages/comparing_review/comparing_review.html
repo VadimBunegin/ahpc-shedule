@@ -1,0 +1,98 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/comparing_review_page.css' %}">
+    <link rel="stylesheet" href="{% static 'css/stars_rating.css' %}">
+    <link rel="stylesheet" href="{% static 'css/mini_rating.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="col-9 offset-1 mb-3">
+    <div class=" p-2 mb-5 card">
+      <h5 class="card-header">Обзор:
+        <div class="badge text-dark" style="background-color: #ABF26D;">{{ review.name }}</div>
+        {% include 'base/widgets/review_rating.html' %}
+        <a href="..." class="btn" style="background-color: #ABF26D; float: right" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom">
+          <i class="bi bi-chat-right-text"></i>
+        </a>
+      </h5>
+
+        <div class="my-3">
+            <p class="h3 text-center">Сравнение товаров</p>
+        </div>
+        <div class="my-3">
+            <div class="h6 text-center">
+                Категория: {{review.first.category}}
+            </div>
+          <center>
+          <div class="bg-light border rounded-1" style="background-color: #eee; height:2rem; width:30rem">
+            {{ review.description }}
+          </div>
+            </center>
+        </div>
+
+        <div class="container my-4">
+            <div class="row mx-2">
+                <div class="col-4">
+                  <a href="{% url 'product_page' review.first.id %}" class="text-black">
+                    <img src="{{ review.get_images.first }}" class="img-thumbnail float-left border border-3">
+                    <div>
+                        <p class="text-center fs-5"> {{review.first}}</p>
+                    </div>
+                  </a>
+                </div>
+                <div class="col-4 d-flex align-items-center justify-content-center">
+                    <span class="fs-1 fw-bold">VS</span>
+                </div>
+                <div class="col-4">
+                  <a href="{% url 'product_page' review.second.id %}" class="text-black">
+                    <img src="{{ review.get_images.second }}" class="img-thumbnail float-right border border-3">
+                    <div>
+                        <p class="text-center fs-5">{{review.second}}</p>
+                    </div>
+                  </a>
+                </div>
+            </div>
+        </div>
+      <hr>
+        <div class="" style="background-color: white;">
+            <div class="mb-3">
+                <p class="text-center fs-4">Характеристики</p>
+            </div>
+
+            <div class="container">
+
+              {% for record in comparing_table %}
+                <div class="row text-center">
+                  <div class="col-4 text-decoration-underline no-padding">
+                    {% if record.result %}<b>{% endif %}
+                      {{record.first_value}}
+                    {% if record.result %}</b>{% endif %}
+                  </div>
+                  <div class="col-4 pb-2" style="background-color: white;">
+                    <p class="no-margin">
+                        <span class="pe-2 element">{{record.characteristic.name}}</span>
+                    </p>
+                  </div>
+                  <div class="col-4 text-decoration-underline">
+                    {% if not record.result %}<b>{% endif %}
+                      {{record.second_value}}
+                    {% if not record.result %}</b>{% endif %}
+                  </div>
+                </div>
+                  {% endfor %}
+
+
+
+            </div>
+        </div>
+
+    </div>
+</div>
+  {% if not review in user.get_all_rated_reviews %}
+  <div class="col-3 mx-auto" style="margin-bottom: 50px;">
+    {% include 'base/widgets/stars_rating.html' %}
+  </div>
+  {% endif %}
+{% endblock %}

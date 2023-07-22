@@ -1,0 +1,9 @@
+{% for item in menu %}
+  <li class="nav-item">
+    <a class="lead nav-link h6 text-light me-2 mb-0" href="{% url item.url_name %}">{{ item.name }}</a>
+  </li>
+{% endfor %}
+
+{% include 'base/menu/authenticated_menu_items.html' %}
+{% include 'base/menu/staff_menu_items.html' %}
+{% include 'base/menu/signup.html' %}

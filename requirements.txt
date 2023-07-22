@@ -1,0 +1,31 @@
+# Engine
+Django==4.0.2
+Pillow==9.0.1
+crispy-bootstrap5==0.6
+
+# Forms
+django-crispy-forms==1.14.0
+
+# Codestyle
+pylint==2.12.2
+pylint-django==2.5.2
+pycodestyle==2.8.0
+
+# Tests
+coverage==6.3.2
+
+# Debug
+django-debug-toolbar==3.2.4
+
+# CI
+anybadge==1.9.0
+pylint-json2html==0.4.0
+
+
+# Deploy
+gunicorn==20.1.0
+whitenoise==6.1.0
+django-sslserver==0.22
+django-cors-headers==3.12.0
+dj-database-url==0.5.0
+psycopg2-binary==2.9.3

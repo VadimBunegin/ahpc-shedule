@@ -1,0 +1,45 @@
+{% extends 'base/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+{% load static %}
+
+<br>
+<br>
+    <div class="card" style="width: 100%">
+      <h5 class="card-header">Добавление новой группы</h5>
+        <div class="card-body">
+          <div class="row mb-3">
+            <form method="post" class="text rounded w-75 form-control border-white" >
+              {% csrf_token %}
+              {{ form|crispy }}
+              <button class="btn btn-primary mt-4 bottom rounded" type="submit">Добавить группу</button>
+            </form>
+          </div>
+        </div>
+    </div>
+
+<script>
+function handleFileSelect(evt) {
+    var file = evt.target.files; // FileList object
+    var f = file[0];
+    // Only process image files.
+    if (!f.type.match('image.*')) {
+        alert("Image only please....");
+    }
+    var reader = new FileReader();
+    // Closure to capture the file information.
+    reader.onload = (function(theFile) {
+        return function(e) {
+            // Render thumbnail.
+            var span = document.createElement('span');
+            span.innerHTML = ['<img class="thumb" title="', escape(theFile.name), '" src="', e.target.result, '" />'].join('');
+            document.getElementById('output').insertBefore(span, null);
+        };
+    })(f);
+    // Read in the image file as a data URL.
+    reader.readAsDataURL(f);
+}
+document.getElementById('file').addEventListener('change', handleFileSelect, false);
+</script>
+{% endblock %}

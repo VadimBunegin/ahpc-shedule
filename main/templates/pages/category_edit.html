@@ -1,0 +1,30 @@
+{% extends 'base/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+{% load static %}
+
+<br>
+<br>
+
+<table class="table bg-light rounded" style="width:50%;">
+  <thead>
+    <tr>
+        <th scope="col">Название</th>
+        <th scope="col">Взаимодействие</th>
+    </tr>
+  </thead>
+  <tbody>
+  {%for categories in category %}
+    <tr>
+      <td>{{ categories.name }}</td>
+      <td>
+          <a href="{% url 'category_delete' categories.id %}" class = "btn m-1 btn-danger" title="Удалить товар">
+              <i class="bi bi-trash"></i>
+          </a>
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

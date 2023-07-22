@@ -1,0 +1,79 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block content %}
+{% if apps %}
+<table class="table table-hover table-striped border shadow p-3 mt-5 mb-5 bg-white rounde">
+  <thead>
+    <tr>
+      <th scope="col">Пользователь:</th>
+      <th scope="col">Комментарий</th>
+      <th scope="col">Cогласие:</th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+  {% for application in apps %}
+    <tr>
+      <td>
+        <div>{{application.user}}</div>
+        <div>Email:
+          <div class="badge bg-primary">{{application.email}}</div>
+        </div>
+      </td>
+
+      <td>
+        <small>
+          <div class="text-secondary">
+            {{application.store_name}}
+          </div>
+        </small>
+      </td>
+
+
+      <td>
+        <div class="form-check">
+          <input class="form-check-input" onchange="buttons(event, {{application.id}})" type="checkbox" id="consent">
+          <label class="form-check-label" for="consent">
+            Я осознаю свои действия
+          </label>
+        </div>
+      </td>
+
+
+      <td>
+        <a href="{% url 'application_accept' application.id %}" class="btn">
+         <button
+             class="btn btn-primary mt-2"
+             title="Принять" disabled
+             id="accept{{application.id}}">
+            <i class="bi bi-check-circle"></i>
+          </button>
+        </a>
+
+        <a href="{% url 'application_reject' application.id %}" class="">
+          <button type="submit"
+             class="btn btn-danger mt-2"
+             title="Отклонить"
+             id="reject{{application.id}}">
+            <i class="bi bi-x-circle"></i>
+          </button>
+        </a>
+
+      </td>
+
+  {% endfor %}
+  </tbody>
+
+</table>
+
+{% else %}
+<h1 class="my-2">Заявок нет</h1>
+
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{% static 'js/applications.js' %}"></script>
+{% endblock %}

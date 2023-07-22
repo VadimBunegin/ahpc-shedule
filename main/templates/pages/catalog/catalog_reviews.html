@@ -1,0 +1,426 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/mini_rating.css' %}">
+{% endblock %}
+
+
+
+{% block content %}
+<style type="text/css">
+   .block {
+    display: inline-block; /* Строчно-блочный элемент */
+   }
+ </style>
+  <center><h1>Расписание</h1></center>
+
+  <form id="category_filter" class="mt-5">
+    <div class="block">
+      <select class="form-select" aria-label="Default select example" name="category" style="width: 200pt">
+        <option label="Выберите группу" disabled>{{ category.name }}</option>
+        {% for category in categories %}
+        <option value="{{category.id}}">{{ category.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="block">
+      <button class = "btn btn-primary" onchange="category_filter.submit()">Найти</button>
+    </div>
+  </form>
+
+    {% if reviews %}
+  <table class="table table-hover table-striped border shadow p-3 mt-5 mb-5 bg-white rounded">
+  <thead>
+    <tr>
+      <th scope="col">Время</th>
+      <th scope="col">Урок</th>
+      <th scope="col">Понедельник</th>
+      <th scope="col">Вторник</th>
+      <th scope="col">Среда</th>
+      <th scope="col">Четверг</th>
+      <th scope="col">Пятница</th>
+      <th scope="col">Суббота</th>
+      {% if request.user.is_staff or request.user.is_store_manager %}
+        <th scope="col">Взаимодействия</th>
+      {% endif %}
+    </tr>
+  </thead>
+
+            <tbody>
+
+          {% for review in reviews %}
+    <tr>
+      <td>
+        {{ review.time }}
+
+      </td>
+      <td>
+        {{ review.week }}
+
+      </td>
+      <td data-bs-toggle="modal" data-bs-target="#one{{review.id}}">
+        <div class="col">
+          {{ review.monday|truncatechars:10 }}
+          <div class="badge bg-secondary">{{ review.type|truncatechars:10 }}</div>
+        </div>
+        <br>
+        <div class="col fst-italic fw-lighter">
+          <small>
+            {{ review.teacher }}
+          </small>
+        </div>
+        <div class="col fst-italic fw-lighter">
+          <small>
+            Аудитория: {{ review.auditory }}
+          </small>
+        </div>
+      </td>
+
+      <td data-bs-toggle="modal" data-bs-target="#two{{review.id}}">
+        <div class="col">
+          {{ review.tuesday|truncatechars:10 }}
+          <div class="badge bg-secondary">{{ review.type_tuesday|truncatechars:10 }}</div>
+        </div>
+        <br>
+        <div class="col fst-italic fw-lighter">
+          <small>
+            {{ review.teacher_tuesday }}
+          </small>
+        </div>
+        <div class="col fst-italic fw-lighter">
+          <small>
+            Аудитория: {{ review.auditory_tuesday }}
+          </small>
+        </div>
+      </td>
+
+      <td data-bs-toggle="modal" data-bs-target="#three{{review.id}}">
+        <div class="col">
+          {{ review.wednesday|truncatechars:10 }}
+          <div class="badge bg-secondary">{{ review.type_wednesday|truncatechars:10 }}</div>
+        </div>
+        <br>
+        <div class="col fst-italic fw-lighter">
+          <small>
+            {{ review.teacher_wednesday }}
+          </small>
+        </div>
+        <div class="col fst-italic fw-lighter">
+          <small>
+            Аудитория: {{ review.auditory_wednesday }}
+          </small>
+        </div>
+      </td>
+
+      <td data-bs-toggle="modal" data-bs-target="#four{{review.id}}">
+        <div class="col">
+          {{ review.thursday|truncatechars:10 }}
+          <div class="badge bg-secondary">{{ review.type_thursday|truncatechars:10 }}</div>
+        </div>
+        <br>
+        <div class="col fst-italic fw-lighter">
+          <small>
+            {{ review.teacher_thursday }}
+          </small>
+        </div>
+        <div class="col fst-italic fw-lighter">
+          <small>
+            Аудитория: {{ review.auditory_thursday }}
+          </small>
+        </div>
+      </td>
+
+      <td data-bs-toggle="modal" data-bs-target="#five{{review.id}}">
+        <div class="col">
+          {{ review.friday|truncatechars:10 }}
+          <div class="badge bg-secondary">{{ review.type_friday|truncatechars:10 }}</div>
+        </div>
+        <br>
+        <div class="col fst-italic fw-lighter">
+          <small>
+            {{ review.teacher_friday }}
+          </small>
+        </div>
+        <div class="col fst-italic fw-lighter">
+          <small>
+            Аудитория: {{ review.auditory_friday }}
+          </small>
+        </div>
+      </td>
+      <td data-bs-toggle="modal" data-bs-target="#six{{review.id}}">
+        <div class="col">
+          {{ review.saturday|truncatechars:10 }}
+          <div class="badge bg-secondary">{{ review.type_saturday|truncatechars:10 }}</div>
+        </div>
+        <br>
+        <div class="col fst-italic fw-lighter">
+          <small>
+            {{ review.teacher_saturday }}
+          </small>
+        </div>
+        <div class="col fst-italic fw-lighter">
+          <small>
+            Аудитория: {{ review.auditory_saturday }}
+          </small>
+        </div>
+      </td>
+      <td>
+        {% if request.user.is_staff or request.user.is_store_manager %}
+        <a href="{% url 'product_edit_page' review.id %}" class="btn btn-primary m-1" style="float: right" title="Редактировать товар">
+          <i class="bi bi-pencil-square"></i>
+          <a href="{% url 'product_delete' review.id %}" class = "btn m-1 btn-danger" style = "float: right" title="Удалить товар">
+          <i class="bi bi-trash"></i>
+        </a>
+        </a>
+        {% endif %}
+      </td>
+      <div class="modal fade" id="one{{review.id}}" tabindex="-1" aria-labelledby="exampleModalLabelone" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabelone">Информация</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="row">
+                  <div class="col">
+                    Дисциплина: {{ review.monday }}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    Тип: {{ review.type }}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    Преподаватель: {{ review.teacher }}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    Аудитория: {{ review.auditory }}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    Комментарий: {{ review.comments }}
+                  </div>
+                </div>
+
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      <div class="modal fade" id="two{{review.id}}" tabindex="-1" aria-labelledby="exampleModalLabel1two" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel1two">Информация</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="row">
+                  <div class="col">
+                    Дисциплина: {{ review.tuesday }}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    Тип: {{ review.type_tuesday }}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    Преподаватель: {{ review.teacher_tuesday }}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    Аудитория: {{ review.auditory_tuesday }}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    Комментарий: {{ review.comments_tuesday }}
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      <div class="modal fade" id="three{{review.id}}" tabindex="-1" aria-labelledby="exampleModalLabel1three" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel1three">Информация</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="row">
+                  <div class="col">
+                    Дисциплина: {{ review.wednesday }}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    Тип: {{ review.type_wednesday }}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    Преподаватель: {{ review.teacher_wednesday }}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    Аудитория: {{ review.auditory_wednesday }}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    Комментарий: {{ review.comments_wednesday }}
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      <div class="modal fade" id="four{{review.id}}" tabindex="-1" aria-labelledby="exampleModalLabel1four" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel1four">Информация</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="row">
+                  <div class="col">
+                    Дисциплина: {{ review.thursday }}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    Тип: {{ review.type_thursday }}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    Преподаватель: {{ review.teacher_thursday }}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    Аудитория: {{ review.auditory_thursday }}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    Комментарий: {{ review.comments_thursday }}
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      <div class="modal fade" id="five{{review.id}}" tabindex="-1" aria-labelledby="exampleModalLabel1five" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel1five">Информация</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="row">
+                  <div class="col">
+                    Дисциплина: {{ review.friday }}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    Тип: {{ review.type_friday }}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    Преподаватель: {{ review.teacher_friday }}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    Аудитория: {{ review.auditory_friday }}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    Комментарий: {{ review.comments_friday }}
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      <div class="modal fade" id="six{{review.id}}" tabindex="-1" aria-labelledby="exampleModalLabel1six" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel1six">Информация</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="row">
+                  <div class="col">
+                    Дисциплина: {{ review.saturday }}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    Тип: {{ review.type_saturday }}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    Преподаватель: {{ review.teacher_saturday }}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    Аудитория: {{ review.auditory_saturday }}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    Комментарий: {{ review.comments_saturday }}
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+    {% endfor %}
+
+  </tbody>
+
+  </table>
+    {% endif %}
+  </div>
+{% endblock %}

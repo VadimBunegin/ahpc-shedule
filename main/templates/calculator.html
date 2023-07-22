@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>База данных</title>
+    </head>
+    <body>
+        <table border="1px">
+            <tr>
+                <td>ID</td>
+                <td>first</td>
+                <td>second</td>
+                <td>date</td>
+            </tr>
+            {% for record in history %}
+            <tr>
+                <td>{{ record.id }}</td>
+                <td>{{ record.first }}</td>
+                <td>{{ record.second }}</td>
+                <td>{{ record.date }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </body>
+</html>

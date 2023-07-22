@@ -1,0 +1,39 @@
+<div class="rating-mini" title="{{review.rating}}">
+  {% if review.rating < 1 %}
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+  {% elif review.rating < 2 %}
+  <span class="active"></span>
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+  {% elif review.rating < 3 %}
+  <span class="active"></span>
+  <span class="active"></span>
+  <span></span>
+  <span></span>
+  <span></span>
+  {% elif review.rating < 4 %}
+  <span class="active"></span>
+  <span class="active"></span>
+  <span class="active"></span>
+  <span></span>
+  <span></span>
+  {% elif review.rating < 5 %}
+  <span class="active"></span>
+  <span class="active"></span>
+  <span class="active"></span>
+  <span class="active"></span>
+  <span></span>
+  {% elif review.rating == 5 %}
+  <span class="active"></span>
+  <span class="active"></span>
+  <span class="active"></span>
+  <span class="active"></span>
+  <span class="active"></span>
+  {% endif %}
+</div>

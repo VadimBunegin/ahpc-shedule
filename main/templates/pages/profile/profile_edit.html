@@ -1,0 +1,66 @@
+{% extends 'base/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+{% load static %}
+
+<br>
+<div class="row">
+  <div class="col">
+    <div class="card">
+      <h5 class="card-header">Пользователь: <div class="badge text-light bg-primary">{{ user.username }}</div>
+
+        </a>
+      </h5>
+
+      <form method='post' action="/profile/{{user.id}}/edit/" id="text_fields">
+        {% csrf_token %}
+
+        <div class="card-body">
+          <br>
+        <div class="row mb-3">
+          <label class="col-sm-3 col-form-label">Username:</label>
+          <input class="text rounded opacity-75 w-75 form-control" style="background-color: #eee;" type="text" name='username' required placeholder="Введите никнейм пользователя"
+                       value="{{ user.username }}" aria-label="Введите заголовок" aria-describedby="basic-addon1">
+        </div>
+
+        <div class="row mb-3">
+          <label class="col-sm-3 col-form-label">Email:</label>
+          <input class="text rounded opacity-75 w-75 form-control" style="background-color: #eee;" type="text" name='email' required placeholder="Введите адрес электронной почты"
+                       value="{{ user.email }}" aria-label="Введите заголовок" aria-describedby="basic-addon1">
+       </div>
+          {% if user.is_store_manager %}
+            <div class="form-check">
+              <input class="form-check-input mb-2" type="checkbox"
+                    {% if user.is_store_manager %} checked {% endif %}
+                     disabled>
+              <label class="form-check-label">
+                Представитель магазина
+              </label>
+            </div>
+          {% endif %}
+          <br>
+          <br>
+          <br>
+          <br>
+          {% if not user.is_store_manager %}
+          <div class="form-text mb-2">*Если вы являетесь представителем колледжа,
+            то просим вас заполнить специальную <a href="{% url 'registration_store_manager' %}" class="link">форму</a></div>
+          {% endif %}
+
+              <input type="submit" form="text_fields" class="btn btn-primary mt-3" value="Применить изменения">
+
+              <a href="{% url 'profile' %}" class="btn btn-danger btn mt-3" >Отменить
+                <i class="bi bi-x-circle-fill"></i>
+              </a>
+
+      </div>
+      </form>
+    </div>
+  </div>
+
+
+</div>
+<br>
+<br>
+{% endblock %}
